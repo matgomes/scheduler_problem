@@ -1,7 +1,8 @@
 # scheduler problem
+Technologies used: nodejs, mocha and chai
 
 ## Requirements
-- Latest version of node and npm
+Latest version of node and npm
 
 ## Install dependencies
     npm install
