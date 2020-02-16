@@ -112,17 +112,3 @@ describe('Helper functions - isWildcard', () => {
 	});
 	
 });
-
-describe('Helper functions - isAfter', () => {
-	
-	it('Test: should build the correct output', () => {
-	
-		const p1 = 10;
-		const p2 = 30;
-
-		const res = isAfter(p1, p2);
-		assert.isFalse(res);
-
-	});
-	
-});
