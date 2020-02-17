@@ -3,29 +3,22 @@ const { isBefore, isEqual, isAfter, isWildcard, buildOutputTime } = require('./h
 const TOMORROW = "tomorrow";
 const TODAY = "today";
 
-const wildcardHourAndSpecificMinute = ({cronMinute, currentHour, currentMinute}) => {
-    
-    let resultHour, day;
+const buildOutputForNextHour = (hour, minute) => {
+    const [resultHour, day] = hour == 23 ? ["00", TOMORROW] : [parseInt(hour) + 1, TODAY];
+    return buildOutputTime(resultHour, minute, day)
+}
 
-    if(isBefore(cronMinute, currentMinute)){
-        [resultHour, day] = currentHour == 23 ? ["00", TOMORROW] : [parseInt(currentHour) + 1, TODAY];
-    }
-
-    if(isAfter(cronMinute, currentMinute)){
-        resultHour = currentHour;
-        day = TODAY;
-    }
-
-    return buildOutputTime(resultHour, cronMinute, day);
-
+const wildcardHourAndSpecificMinute = (cronMinute, currentHour, currentMinute) => {
+    return isAfter(cronMinute, currentMinute) 
+            ? buildOutputTime(currentHour, cronMinute, TODAY)
+            : buildOutputForNextHour(currentHour, cronMinute)
 };
 
-const handleCronForWildcardHour = (data) => {
-    return isWildcard(data.cronMinute) || isEqual(data.cronMinute, data.currentMinute) 
-            ? buildOutputTime(data.currentHour, data.currentMinute, TODAY)
-            : wildcardHourAndSpecificMinute(data)
+const handleWildcardHourCron = ({cronMinute, currentHour, currentMinute}) => {
+    return isWildcard(cronMinute) || isEqual(cronMinute, currentMinute) 
+            ? buildOutputTime(currentHour, currentMinute, TODAY)
+            : wildcardHourAndSpecificMinute(cronMinute, currentHour, currentMinute)
 };
-
 
 const buildOutputForSameHour = ({cronHour, cronMinute, currentMinute}) => {
 
@@ -43,13 +36,13 @@ const buildOutputForDifferentHour = ({cronHour, cronMinute, currentHour}) => {
     return buildOutputTime(cronHour, resultMinute, resultDay);
 };
 
-const handleCronForSpecificHour = (data) => {
+const handleSpecificHourCron = (data) => {
     const handler = isEqual(data.cronHour, data.currentHour) ? buildOutputForSameHour : buildOutputForDifferentHour;
     return handler(data);
 };
 
-const handleSchedule = (data) => {
-    const handler = isWildcard(data.cronHour) ? handleCronForWildcardHour : handleCronForSpecificHour;
+const getOutputTime = (data) => {
+    const handler = isWildcard(data.cronHour) ? handleWildcardHourCron : handleSpecificHourCron;
     return handler(data);
 };
 
@@ -60,7 +53,7 @@ const handleInput = (input, currentTime) => {
     
     const inputData = { cronHour, cronMinute, currentHour, currentMinute };
 
-    return `${handleSchedule(inputData)} - ${command}`;
+    return `${getOutputTime(inputData)} - ${command}`;
 };
 
 module.exports = handleInput;
