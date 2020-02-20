@@ -6,7 +6,7 @@ const TODAY = "today";
 const buildOutputForNextHour = (hour, minute) => {
     const [resultHour, day] = hour == 23 ? ["00", TOMORROW] : [parseInt(hour) + 1, TODAY];
     return buildOutputTime(resultHour, minute, day)
-}
+};
 
 const wildcardHourAndSpecificMinute = (cronMinute, currentHour, currentMinute) => {
     return isAfter(cronMinute, currentMinute) 
