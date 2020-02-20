@@ -23,7 +23,7 @@ const handleWildcardHourCron = ({cronMinute, currentHour, currentMinute}) => {
 const buildOutputForSameHour = ({cronHour, cronMinute, currentMinute}) => {
 
     const resultMinute = isWildcard(cronMinute) ? currentMinute : cronMinute;
-    const resultDay = isWildcard(cronMinute) || isAfter(cronMinute, currentMinute) ? TODAY : TOMORROW;
+    const resultDay = isWildcard(cronMinute) || !isBefore(cronMinute, currentMinute)  ? TODAY : TOMORROW;
 
     return buildOutputTime(cronHour, resultMinute, resultDay);
 };
