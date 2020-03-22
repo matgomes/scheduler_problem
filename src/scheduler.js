@@ -8,7 +8,7 @@ const buildOutputForNextHour = (hour, minute) => {
     return buildOutputTime(resultHour, minute, day)
 };
 
-const wildcardHourAndSpecificMinute = (cronMinute, currentHour, currentMinute) => {
+const handleWildcardHourAndSpecificMinute = (cronMinute, currentHour, currentMinute) => {
     return isAfter(cronMinute, currentMinute) 
             ? buildOutputTime(currentHour, cronMinute, TODAY)
             : buildOutputForNextHour(currentHour, cronMinute)
@@ -17,7 +17,7 @@ const wildcardHourAndSpecificMinute = (cronMinute, currentHour, currentMinute) =
 const handleWildcardHourCron = ({cronMinute, currentHour, currentMinute}) => {
     return isWildcard(cronMinute) || isEqual(cronMinute, currentMinute) 
             ? buildOutputTime(currentHour, currentMinute, TODAY)
-            : wildcardHourAndSpecificMinute(cronMinute, currentHour, currentMinute)
+            : handleWildcardHourAndSpecificMinute(cronMinute, currentHour, currentMinute)
 };
 
 const buildOutputForSameHour = ({cronHour, cronMinute, currentMinute}) => {
