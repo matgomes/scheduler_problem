@@ -1,8 +1,5 @@
 # scheduler problem
-Technologies used: nodejs, mocha and chai. \
-Description in problem.txt
-
-
+Technologies used: nodejs, mocha and chai. 
 
 ## Requirements
 Latest version of node and npm
